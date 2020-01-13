@@ -1,0 +1,38 @@
+# Please import & load the data set train.csv before running this code.
+# I renamed this table of data for my own sanity
+dftitanic <- train.csv
+
+# What is the mean age of survivors on the Titanic?
+# Lets extract rows with survivors
+survivors_only <- filter(dftitanic, Survived == 1, Age != "NA")
+# Reminder to self- the line above gave me crap until I put "" around the NA.  Details man, details.
+
+# Use the mean() function to find the average age of survivors on the Titanic
+avg_age_surv <- mean(survivors_only$Age)
+avg_age_surv
+# Now we'll try summarise to find the mean age of surivors since that's 
+# a fun new thing for me with dplyr
+sumz_surv <- summarise(survivors_only, avg=mean(Age))
+sumz_surv
+# Sweet, they're the same.  I haven't screwed it all up.  Everything's coming up Milhouse
+# The average age of survivors on the Titanic was 28.3 years.
+
+# How many people died vs survived?
+# Try using that dplyr count function
+count(dftitanic, Survived)
+# That's 342 survivors on the list, and 549 deaths.  Which comes to....
+percent_survival <- ((342 / (342 + 549) *100))
+# A 38% survival rate. Probably should have invested in some lifeboats afterall.
+
+# Let's count up folks by class while we're at it
+count(dftitanic, Pclass)
+# That's 216 1st class, 184 2nd class, and 491 sad saps in the ship's basement.
+# Ok Dplyr, how much can you do for me.... let's see those death stats by class!
+count(dftitanic, Pclass, Survived)
+# And how do your odds of surviving change based on your passenger class?
+pc3_PSV <- ((119/(119+372))*100)
+# Looks like third class passengers are bringing down the survival rate, with only 24.2% surviving.
+pc2_PSV <- ((87/(87+97))*100)
+# So second class passengers had just over half of the passengers die, coming in at 47.2% surviving.
+pc1_PSV <- ((136/(80+136))*100)
+# Hey!  62.9% of those first class passengers survived.  Who says money can't buy you happiness?
